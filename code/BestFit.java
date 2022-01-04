@@ -1,3 +1,5 @@
+package code;
+
 import java.util.ArrayList;
 
 public class BestFit extends MemoryAllocationAlgorithm {
