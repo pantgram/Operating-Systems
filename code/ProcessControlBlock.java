@@ -35,7 +35,7 @@ public class ProcessControlBlock {
             //if a process stops
         else if ((this.state == ProcessState.RUNNING && state == ProcessState.READY) || (this.state == ProcessState.RUNNING && state == ProcessState.TERMINATED))
             this.stopTimes.add(currentClockTime);
-        //set state
+        //set state with the new one
         this.state = state;
     }
 
