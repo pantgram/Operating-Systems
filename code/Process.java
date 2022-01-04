@@ -16,34 +16,51 @@ public class Process {
     public ProcessControlBlock getPCB() {
         return this.pcb;
     }
-   
+
     public void run() {
         /* TODO: you need to add some code here
          * Hint: this should run every time a process starts running */
-        
+
+        //change currentClockTime
+        pcb.setState(ProcessState.RUNNING,0);
     }
     
     public void waitInBackground() {
         /* TODO: you need to add some code here
          * Hint: this should run every time a process stops running */
-        
+
+        //change currentClockTime
+        pcb.setState(ProcessState.READY,0);
     }
 
     public double getWaitingTime() {
-        /* TODO: you need to add some code here
-         * and change the return value */
-        return 0;
+        int waitingTime=0;
+        int end=pcb.getStartTimes().size()-1;
+
+        //add all periods that the process is in waiting situation,
+        //since the first starting time
+        for(int i=1; i<=end; i++){
+            int temp=pcb.getStartTimes().get(i)-pcb.getStopTimes().get(i-1);
+            waitingTime+=temp;
+        }
+
+        //add responce time on total
+        waitingTime+=getResponseTime();
+
+        return waitingTime;
     }
     
     public double getResponseTime() {
-        /* TODO: you need to add some code here
-         * and change the return value */
-        return 0;
+        int startingTime = pcb.getStartTimes().get(0);
+        //first element of startTimes pcb-arraylist
+
+        return startingTime - arrivalTime;
     }
     
     public double getTurnAroundTime() {
-        /* TODO: you need to add some code here
-         * and change the return value */
-        return 0;
+        int finishingTime = pcb.getStopTimes().get(pcb.getStopTimes().size()-1);
+        //last element of stopTimes pcb-arraylist
+
+        return finishingTime - arrivalTime;
     }
 }
