@@ -63,4 +63,8 @@ public class Process {
 
         return finishingTime - arrivalTime;
     }
+
+    public int getMemoryRequirements() {
+        return this.memoryRequirements;
+    }
 }
