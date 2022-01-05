@@ -37,6 +37,9 @@ public class FirstFit extends MemoryAllocationAlgorithm {
                     blockStart = blockEnd;
                     blockEnd += this.availableBlockSizes[i+1];
                 }
+            } else if (i+1 < blockLength) {
+                blockStart = blockEnd;
+                blockEnd += this.availableBlockSizes[i+1];
             }
         }
 
