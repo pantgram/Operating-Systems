@@ -19,7 +19,9 @@ public abstract class Scheduler {
      * of processes that are candidates for execution. Common for all
      * schedulers. */
     public void removeProcess(Process p) {
-        processes.remove(p);
+        if(p.getPCB().getState() == ProcessState.TERMINATED) {
+            processes.remove(p);
+        }
     }
     
     /* the getNextProcess() method should return the process that should
