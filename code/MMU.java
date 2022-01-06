@@ -16,31 +16,33 @@ public class MMU {
 
     public boolean loadProcessIntoRAM(Process p) {
         boolean fit = false;
+
+      /*The memory address where the Process is going to be stored
+        If storingAddress = -1 then a suitable address has not been found.*/
         int storingAddress = this.algorithm.fitProcess(p, this.currentlyUsedMemorySlots);
 
         if (storingAddress != -1) {
-
             fit = true;
             int storingBlock = findMemoryBlock(storingAddress);
 
             if (storingBlock == -1) {
-                System.out.println("Memory out of bounds");
                 return false;
             }
+
+            /* Adding the Memory slot that was used to store the Process into the currentlyUsedMemorySlots ArrayList */
             int blockStart = findBlockStart(storingBlock);
             int blockEnd = findBlockEnd(storingBlock);
             this.currentlyUsedMemorySlots.add(new MemorySlot(storingAddress, (storingAddress + p.getMemoryRequirements()), blockStart, blockEnd));
-
-            System.out.println("Storing Block : " + storingBlock);
-            System.out.println("Memory Start : " + storingAddress);
-            System.out.println("Memory End : " + (storingAddress + p.getMemoryRequirements()));
-            System.out.println("Block Start : " + blockStart);
-            System.out.println("Block End : " + blockEnd);
         }
         
         return fit;
     }
 
+    /**
+     * @param storingAddress The memory address where the Process is going to be stored.
+     * @return The index of the memory block that the Process is going to be stored in the availableBlockSizes array.
+     *         If the block is not found the value -1 is returned
+     */
     private int findMemoryBlock(int storingAddress) {
         int blockStart = 0;
         int blockEnd = this.availableBlockSizes[0];
@@ -59,6 +61,10 @@ public class MMU {
         return -1;
     }
 
+    /**
+     * @param blockNum The index of the memory block in the "availableBlockSizes" array
+     * @return The memory address where the memory block starts
+     */
     private int findBlockStart(int blockNum) {
         int blockStart = 0;
         for (int i=0; i<blockNum; i++) {
@@ -67,6 +73,10 @@ public class MMU {
         return blockStart;
     }
 
+    /**
+     * @param blockNum The index of the memory block in the "availableBlockSizes" array
+     * @return The memory address where the memory block ends
+     */
     private int findBlockEnd(int blockNum) {
         int blockEnd = 0;
         for (int i=0; i<=blockNum; i++) {
@@ -75,11 +85,4 @@ public class MMU {
         return blockEnd;
     }
 
-    public static void main(String[] args) {
-        final int[] availableBlockSizes = {15, 40, 10, 20};
-        MemoryAllocationAlgorithm algorithm = new FirstFit(availableBlockSizes);
-        MMU mmu = new MMU(availableBlockSizes, algorithm);
-        mmu.loadProcessIntoRAM(new Process(0, 5, 14));
-        mmu.loadProcessIntoRAM(new Process(0, 5, 40));
-    }
 }
