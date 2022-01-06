@@ -44,7 +44,7 @@ public class Process {
             waitingTime+=temp;
         }
 
-        //add responce time on total
+        //add response time on total
         waitingTime+=getResponseTime();
 
         return waitingTime;

@@ -2,17 +2,35 @@ package code;
 
 public class SRTF extends Scheduler {
 
+     private  Process currentProcess;
+
     public SRTF() {
-        /* TODO: you _may_ need to add some code here */
+        this.currentProcess = null;
     }
 
     public void addProcess(Process p) {
-        /* TODO: you need to add some code here */
+        if((p.getPCB().getState() == ProcessState.READY) || (p.getPCB().getState() == ProcessState.RUNNING)){
+            processes.add(p);
+        }
     }
     
     public Process getNextProcess() {
-        /* TODO: you need to add some code here
-         * and change the return value */
-        return null;
+        if(currentProcess == null || !processes.contains(currentProcess)){
+            currentProcess = processes.get(0);
+        }
+        else
+        {
+            int index = processes.indexOf(currentProcess);
+            double min=99999;
+            int new_index=0;
+            for(int i=index; i<=processes.size(); i++){
+              if(processes.get(i).getResponseTime()<=min){
+                  min = processes.get(i).getResponseTime();
+                  new_index = i;
+              }
+            }
+            currentProcess=processes.get(new_index);
+        }
+        return currentProcess;
     }
 }
