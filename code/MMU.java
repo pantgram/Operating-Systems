@@ -55,7 +55,7 @@ public class MMU {
 
             } else if (i+1 < blockLength) {
                 blockStart = blockEnd;
-                blockEnd = this.availableBlockSizes[i+1];
+                blockEnd += this.availableBlockSizes[i+1];
             }
         }
         return -1;
