@@ -1,13 +1,10 @@
 package code;
 
 public class FCFS extends Scheduler {
-
     private Process currentProcess;
-    private int index;
 
     public FCFS() {
         this.currentProcess = null;
-        this.index = 0;
     }
 
     public void addProcess(Process p) {
@@ -18,14 +15,40 @@ public class FCFS extends Scheduler {
     }
 
     public Process getNextProcess() {
-        //if none processes executed pick the first one
-        if (index == 0) {
-            this.currentProcess = processes.get(index);
+        if (currentProcess == null) {
+            currentProcess = processes.get(0);
         } else {
-            //else pick the next
-            index += 1;
-            this.currentProcess = processes.get(index);
+            //index of the current process
+            int index = processes.indexOf(currentProcess);
+            Process previousProcess = currentProcess;
+            //TODO: previousProcess.reduceBurstTime - if needed
+
+            //new current process - the process to be returned
+            if (processes.get(index+1) != null) {
+                currentProcess = processes.get(index + 1);
+
+                //remove previous process from the start of line
+                processes.remove(previousProcess);
+            }
         }
-        return this.currentProcess;
+        System.out.println(currentProcess.getPCB().getPid());
+        return currentProcess;
+    }
+
+    public static void main(String[] args) {
+        Scheduler scheduler = new FCFS();
+        Process p1 = new Process(0, 5, 10);
+        p1.getPCB().setState(ProcessState.READY, 0);
+        Process p2 = new Process(2, 2, 40);
+        p2.getPCB().setState(ProcessState.READY, 6);
+        Process p3 = new Process(5, 4, 30);
+        p3.getPCB().setState(ProcessState.READY, 8);
+        scheduler.addProcess(p1);
+        scheduler.addProcess(p2);
+        scheduler.addProcess(p3);
+        scheduler.getNextProcess();
+        scheduler.getNextProcess();
+        scheduler.getNextProcess();
     }
 }
+

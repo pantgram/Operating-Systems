@@ -67,4 +67,7 @@ public class Process {
     public int getMemoryRequirements() {
         return this.memoryRequirements;
     }
+    public int getBurstTime(){
+        return this.burstTime;
+    }
 }
