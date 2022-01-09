@@ -19,11 +19,12 @@ public class CPU {
         /* TODO: you need to add some code here
          * Hint: you need to run tick() in a loop, until there is nothing else to do... */
 
+
     }
     
     public void tick() {
         /* TODO: you need to add some code here
          * Hint: this method should run once for every CPU cycle */
-        
+
     }
 }
