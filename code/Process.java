@@ -70,4 +70,7 @@ public class Process {
     public int getBurstTime(){
         return this.burstTime;
     }
+    public int getArrivalTime(){
+        return this.arrivalTime;
+    }
 }
