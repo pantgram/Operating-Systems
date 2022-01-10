@@ -18,11 +18,7 @@ public class Process {
     }
 
     public void run() {
-        /* TODO: you need to add some code here
-         * Hint: this should run every time a process starts running */
-
-        //change currentClockTime
-        pcb.setState(ProcessState.RUNNING,0);
+        pcb.setState(ProcessState.RUNNING,CPU.clock);
     }
     
     public void waitInBackground() {
@@ -30,7 +26,7 @@ public class Process {
          * Hint: this should run every time a process stops running */
 
         //change currentClockTime
-        pcb.setState(ProcessState.READY,0);
+        pcb.setState(ProcessState.READY,CPU.clock);
     }
 
     public double getWaitingTime() {
@@ -62,6 +58,10 @@ public class Process {
         //last element of stopTimes pcb-arraylist
 
         return finishingTime - arrivalTime;
+    }
+
+    public void setBurstTime(int burstTime) {
+        this.burstTime = burstTime;
     }
 
     public int getMemoryRequirements() {

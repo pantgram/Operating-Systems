@@ -1,10 +1,11 @@
 package code;
 
 public class FCFS extends Scheduler {
-    private Process currentProcess;
+
+
 
     public FCFS() {
-        this.currentProcess = null;
+
     }
 
     public void addProcess(Process p) {
@@ -15,25 +16,29 @@ public class FCFS extends Scheduler {
     }
 
     public Process getNextProcess() {
-        if (currentProcess == null) {
-            currentProcess = processes.get(0);
-        } else {
-            //index of the current process
-            int index = processes.indexOf(currentProcess);
-            Process previousProcess = currentProcess;
-            //TODO: previousProcess.reduceBurstTime - if needed
+        //check if processes is  empty
+        if (processes.size() > 0) {
+            //check if process is ended
+            if (processes.get(0).getBurstTime() != 0) {
+                processes.get(0).setBurstTime(processes.get(0).getBurstTime() - 1);
+                System.out.println(processes.get(0).getPCB().getPid());
+                return processes.get(0);
 
-            //new current process - the process to be returned
-            if (processes.get(index+1) != null) {
-                currentProcess = processes.get(index + 1);
-
-                //remove previous process from the start of line
-                processes.remove(previousProcess);
+            } else {
+                //process ended so we have to remove it
+                removeProcess(processes.get(0));
+                //if we have another process this is the next process
+                if (processes.size() > 0) {
+                    processes.get(0).setBurstTime(processes.get(0).getBurstTime() - 1);
+                    System.out.println(processes.get(0).getPCB().getPid());
+                    return processes.get(0);
+                }
             }
         }
-        System.out.println(currentProcess.getPCB().getPid());
-        return currentProcess;
+        //if there are not other processes return null
+        return null;
     }
+
 
     public static void main(String[] args) {
         Scheduler scheduler = new FCFS();
@@ -46,9 +51,13 @@ public class FCFS extends Scheduler {
         scheduler.addProcess(p1);
         scheduler.addProcess(p2);
         scheduler.addProcess(p3);
-        scheduler.getNextProcess();
-        scheduler.getNextProcess();
-        scheduler.getNextProcess();
+        System.out.println(p1.getPCB().getState());
+        System.out.println(p2.getPCB().getState());
+        System.out.println(p3.getPCB().getState());
+        for (int i = 0; i < 19; i++) {
+            scheduler.getNextProcess();
+        }
+
     }
 }
 
