@@ -14,6 +14,10 @@ public class MMU {
         this.currentlyUsedMemorySlots = new ArrayList<MemorySlot>();
     }
 
+    public ArrayList<MemorySlot> getCurrentlyUsedMemorySlots() {
+        return currentlyUsedMemorySlots;
+    }
+
     public boolean loadProcessIntoRAM(Process p) {
         boolean fit = false;
 
