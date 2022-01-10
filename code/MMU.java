@@ -7,7 +7,7 @@ public class MMU {
     private final int[] availableBlockSizes;
     private MemoryAllocationAlgorithm algorithm;
     private ArrayList<MemorySlot> currentlyUsedMemorySlots;
-    
+
     public MMU(int[] availableBlockSizes, MemoryAllocationAlgorithm algorithm) {
         this.availableBlockSizes = availableBlockSizes;
         this.algorithm = algorithm;
@@ -32,30 +32,33 @@ public class MMU {
             /* Adding the Memory slot that was used to store the Process into the currentlyUsedMemorySlots ArrayList */
             int blockStart = findBlockStart(storingBlock);
             int blockEnd = findBlockEnd(storingBlock);
-            this.currentlyUsedMemorySlots.add(new MemorySlot(storingAddress, (storingAddress + p.getMemoryRequirements()), blockStart, blockEnd));
+            MemorySlot newSlot = new MemorySlot(storingAddress, (storingAddress + p.getMemoryRequirements()), blockStart, blockEnd);
+            newSlot.setProcess(p);
+            p.getPCB().setState(ProcessState.READY, CPU.clock);
+            this.currentlyUsedMemorySlots.add(newSlot);
         }
-        
+
         return fit;
     }
 
     /**
      * @param storingAddress The memory address where the Process is going to be stored.
      * @return The index of the memory block that the Process is going to be stored in the availableBlockSizes array.
-     *         If the block is not found the value -1 is returned
+     * If the block is not found the value -1 is returned
      */
     private int findMemoryBlock(int storingAddress) {
         int blockStart = 0;
         int blockEnd = this.availableBlockSizes[0];
         int blockLength = this.availableBlockSizes.length;
 
-        for (int i=0; i<blockLength; i++) {
+        for (int i = 0; i < blockLength; i++) {
 
             if ((blockStart <= storingAddress) && (blockEnd > storingAddress)) {
                 return i;
 
-            } else if (i+1 < blockLength) {
+            } else if (i + 1 < blockLength) {
                 blockStart = blockEnd;
-                blockEnd += this.availableBlockSizes[i+1];
+                blockEnd += this.availableBlockSizes[i + 1];
             }
         }
         return -1;
@@ -67,7 +70,7 @@ public class MMU {
      */
     private int findBlockStart(int blockNum) {
         int blockStart = 0;
-        for (int i=0; i<blockNum; i++) {
+        for (int i = 0; i < blockNum; i++) {
             blockStart += this.availableBlockSizes[i];
         }
         return blockStart;
@@ -79,7 +82,7 @@ public class MMU {
      */
     private int findBlockEnd(int blockNum) {
         int blockEnd = 0;
-        for (int i=0; i<=blockNum; i++) {
+        for (int i = 0; i <= blockNum; i++) {
             blockEnd += this.availableBlockSizes[i];
         }
         return blockEnd;

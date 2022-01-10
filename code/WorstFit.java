@@ -60,6 +60,7 @@ public class WorstFit extends MemoryAllocationAlgorithm {
      */
     private int blockFit(int blockStart, int blockEnd, ArrayList<MemorySlot> currentlyUsedMemorySlots, int memorySize) {
         int storingAddress = blockStart;
+        ArrayList<MemorySlot> thisBlockArray = new ArrayList<>();
 
         /* Iterating through "currentlyUsedMemorySlots" ArrayList */
         for (MemorySlot slot : currentlyUsedMemorySlots) {
@@ -67,12 +68,28 @@ public class WorstFit extends MemoryAllocationAlgorithm {
             /* If the "slot" object refers to the current memory block
                we store the biggest, used, memory address of the block inside "storingAddress" */
             if ((slot.getBlockStart() == blockStart) && (slot.getBlockEnd() == blockEnd)) {
-
-                if (slot.getEnd() > blockStart) {
-                    storingAddress = slot.getEnd();
-                }
+                thisBlockArray.add(slot);
             }
         }
+
+        if (!thisBlockArray.isEmpty()) {
+            for (int i = 0; i<thisBlockArray.size(); i++) {
+                MemorySlot nextSlot = findNextSlot(thisBlockArray, storingAddress);
+                if(nextSlot == null) {
+                    break;
+                }
+
+                if((nextSlot.getStart() - storingAddress) >= memorySize) {
+                    return storingAddress;
+                } else  {
+                    storingAddress = nextSlot.getEnd();
+                }
+            }
+
+        } else {
+            return blockStart;
+        }
+
 
         //Returns the memory address to store the Process if the memory block has enough space.
         //If not returns the value -1
@@ -84,4 +101,20 @@ public class WorstFit extends MemoryAllocationAlgorithm {
 
     }
 
+
+    private MemorySlot findNextSlot(ArrayList<MemorySlot> thisBlockSlots, int minStart) {
+        int nextSlotStart = Integer.MAX_VALUE;
+        MemorySlot nextSlot = null;
+        for (MemorySlot slot : thisBlockSlots) {
+            if (slot.getStart() >= minStart && slot.getStart() < nextSlotStart) {
+                nextSlotStart = slot.getStart();
+                nextSlot = slot;
+            }
+        }
+        return nextSlot;
+    }
 }
+
+
+
+

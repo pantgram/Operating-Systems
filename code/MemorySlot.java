@@ -2,6 +2,7 @@ package code;
 
 public class MemorySlot {
 
+    private Process process;
     private int start; // the address where the memory slot starts
     private int end;   // the address where the memory slot ends
     private final int blockStart; // address of where the block starts
@@ -9,7 +10,7 @@ public class MemorySlot {
     /* The following should always hold true:
      * start >= blockStart
      * end <= blockEnd */
-    
+
     public MemorySlot(int start, int end, int blockStart, int blockEnd) {
         if ((start < blockStart) || (end > blockEnd)) {
             throw new java.lang.RuntimeException("Memory access out of bounds.");
@@ -38,6 +39,14 @@ public class MemorySlot {
 
     public int getEnd() {
         return end;
+    }
+
+    public Process getProcess() {
+        return process;
+    }
+
+    public void setProcess(Process process) {
+        this.process = process;
     }
 
     public void setEnd(int end) {
