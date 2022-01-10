@@ -3,60 +3,27 @@ package code;
 public class CPU {
 
     public static int clock = 0; // this should be incremented on every CPU cycle
-
-    private boolean readyRunning;
+    
     private Scheduler scheduler;
     private MMU mmu;
     private Process[] processes;
     private int currentProcess;
-
+    
     public CPU(Scheduler scheduler, MMU mmu, Process[] processes) {
         this.scheduler = scheduler;
         this.mmu = mmu;
         this.processes = processes;
     }
-
+    
     public void run() {
-        while (true) {
-            tick();
-            if (checkToStop())
-                break;
-            clock++;
-        }
-    }
+        /* TODO: you need to add some code here
+         * Hint: you need to run tick() in a loop, until there is nothing else to do... */
 
+    }
+    
     public void tick() {
-        if (readyRunning) {
-            readyRunning = false;
-            return;
-        }
-
-        if (processToLoad()) {
-            return;
-        }
-
-
-
-
-    }
-
-    private boolean checkToStop() {
-        for (Process process : this.processes) {
-            if (!process.getPCB().getState().equals(ProcessState.TERMINATED))
-                return false;
-        }
-        return true;
-    }
-
-    private boolean processToLoad() {
-        for (Process process : this.processes) {
-            if (process.getArrivalTime() >= CPU.clock && process.getPCB().getState().equals(ProcessState.NEW)) {
-                if (this.mmu.loadProcessIntoRAM(process)) {
-                    this.scheduler.addProcess(process);
-                    return true;
-                }
-            }
-        }
-        return false;
+        /* TODO: you need to add some code here
+         * Hint: this method should run once for every CPU cycle */
+        
     }
 }
