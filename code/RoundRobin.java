@@ -33,6 +33,7 @@ public class RoundRobin extends Scheduler {
         //check if it's the first time using this method - initialize currentProcess + pointer
         if (currentProcess == null && processes.size() > 0) {
             currentProcess = processes.get(0);
+            currentProcess.run();
             pointer = 0;
         } else if (currentProcess == null) {
             System.out.println("No more processes to be executed.");
@@ -50,6 +51,8 @@ public class RoundRobin extends Scheduler {
         if (reachQuantum == quantum) {
             reachQuantum = 0;
             pointer++;
+            if (currentProcess != null)
+                currentProcess.waitInBackground();
             currentProcess = nextProcessExists();
         }
 
@@ -57,8 +60,9 @@ public class RoundRobin extends Scheduler {
         if (currentProcess != null) currentProcess.setBurstTime(currentProcess.getBurstTime() - 1);
 
         //TODO: might delete souts
-        if (currentProcess != null) System.out.println("Pid: " + currentProcess.getPCB().getPid());
+        if (currentProcess != null) System.out.println("RUNNING Pid: " + currentProcess.getPCB().getPid()+" IN "+CPU.clock);
         if (currentProcess == null) System.out.println("No more processes to be executed.");
+
 
         return currentProcess;
     }
@@ -66,10 +70,12 @@ public class RoundRobin extends Scheduler {
     private Process nextProcessExists() {
         if (pointer <= processes.size() - 1) { //if next element of arraylist exists
             reachQuantum = 0;
+            processes.get(pointer).run();
             return processes.get(pointer);
         } else if (processes.size() != 0) { //get it from the start
             reachQuantum = 0;
             pointer = 0;
+            processes.get(0).run();
             return processes.get(0);
         }
         return null; //no more processes to be executed
