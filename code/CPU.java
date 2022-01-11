@@ -18,20 +18,19 @@ public class CPU {
 
     public void run() {
         while (true) {
-            tick();
             if (checkToStop())
                 break;
+            tick();
             clock++;
         }
     }
 
     public void tick() {
-        if (readyRunning) {
-            readyRunning = false;
+        if (processToLoad()) {
             return;
         }
-
-        if (processToLoad()) {
+        if (scheduler.processes.size() > 0) {
+            scheduler.getNextProcess();
             return;
         }
 
@@ -48,7 +47,7 @@ public class CPU {
 
     private boolean processToLoad() {
         for (Process process : this.processes) {
-            if (process.getArrivalTime() >= CPU.clock && process.getPCB().getState().equals(ProcessState.NEW)) {
+            if (process.getArrivalTime() <= CPU.clock && process.getPCB().getState().equals(ProcessState.NEW)) {
                 if (this.mmu.loadProcessIntoRAM(process)) {
                     this.scheduler.addProcess(process);
                     return true;

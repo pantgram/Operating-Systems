@@ -23,10 +23,7 @@ public class Process {
     }
     
     public void waitInBackground() {
-        /* TODO: you need to add some code here
-         * Hint: this should run every time a process stops running */
-
-        //change currentClockTime
+        CPU.clock+=2;
         pcb.setState(ProcessState.READY,CPU.clock);
     }
 
