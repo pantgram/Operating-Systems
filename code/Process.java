@@ -18,6 +18,7 @@ public class Process {
     }
 
     public void run() {
+        CPU.clock+=2;
         pcb.setState(ProcessState.RUNNING,CPU.clock);
     }
     
