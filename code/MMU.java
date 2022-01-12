@@ -41,7 +41,6 @@ public class MMU {
             p.getPCB().setState(ProcessState.READY, CPU.clock);
             this.currentlyUsedMemorySlots.add(newSlot);
         }
-
         return fit;
     }
 
