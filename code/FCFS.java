@@ -46,26 +46,5 @@ public class FCFS extends Scheduler {
         return null;
     }
 
-    public static void main(String[] args) {
-        Scheduler scheduler = new FCFS();
-        Process p1 = new Process(0, 5, 10);
-        p1.getPCB().setState(ProcessState.READY, 0);
-        Process p2 = new Process(2, 2, 40);
-        p2.getPCB().setState(ProcessState.READY, 0);
-        Process p3 = new Process(5, 4, 30);
-        p3.getPCB().setState(ProcessState.READY, 0);
-        Process p4 = new Process(8, 7, 50);
-        p4.getPCB().setState(ProcessState.READY, 0);
-        scheduler.addProcess(p1);
-        scheduler.addProcess(p2);
-        scheduler.addProcess(p3);
-        scheduler.addProcess(p4);
-        for (int i = 0; i < 30; i++) {
-            scheduler.getNextProcess();
-            CPU.clock++;
-        }
-    }
-
 }
-
 
