@@ -31,13 +31,10 @@ public class RoundRobin extends Scheduler {
 
     public Process getNextProcess() {
         //check if it's the first time using this method - initialize currentProcess + pointer
-        if (currentProcess == null && processes.size() > 0) {
+        if (currentProcess == null) {
             currentProcess = processes.get(0);
             currentProcess.run();
             pointer = 0;
-        } else if (currentProcess == null) {
-            System.out.println("No more processes to be executed.");
-            return null;
         }
 
         //if the burst time of current process is 0, it is removed
