@@ -17,7 +17,6 @@ public class FCFS extends Scheduler {
 
     public Process getNextProcess() {
         //check if processes is  empty
-        if (processes.size() > 0) {
             if (flag == 0) {
                 flag++;
                 processes.get(0).run();
@@ -41,8 +40,8 @@ public class FCFS extends Scheduler {
                     return processes.get(0);
                 }
             }
-        }
         //if there are not other processes return null
+        flag=0;
         return null;
     }
 
