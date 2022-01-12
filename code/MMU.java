@@ -20,6 +20,9 @@ public class MMU {
 
     public boolean loadProcessIntoRAM(Process p) {
         boolean fit = false;
+        if (memoryOverload(p)) {
+            return false;
+        }
 
       /*The memory address where the Process is going to be stored
         If storingAddress = -1 then a suitable address has not been found.*/
@@ -42,6 +45,16 @@ public class MMU {
             this.currentlyUsedMemorySlots.add(newSlot);
         }
         return fit;
+    }
+
+    private boolean memoryOverload(Process process) {
+        for (int i=0; i<this.availableBlockSizes.length; i++) {
+            if (process.getMemoryRequirements() <= this.availableBlockSizes[i]) {
+                return false;
+            }
+        }
+        process.getPCB().setState(ProcessState.TERMINATED, CPU.clock);
+        return true;
     }
 
     /**
