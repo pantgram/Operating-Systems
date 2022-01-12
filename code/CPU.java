@@ -1,10 +1,12 @@
 package code;
 
+import java.util.ArrayList;
+
 public class CPU {
 
     public static int clock = 0; // this should be incremented on every CPU cycle
 
-    private boolean readyRunning;
+    private final ArrayList<Process> terminatedProcesses = new ArrayList<>();
     private Scheduler scheduler;
     private MMU mmu;
     private Process[] processes;
@@ -17,32 +19,51 @@ public class CPU {
     }
 
     public void run() {
-        while (true) {
-            if (checkToStop())
-                break;
+        while (checkToStop()) {
             tick();
             clock++;
         }
     }
 
     public void tick() {
+        removeTerminatedProcesses();
+
         if (processToLoad()) {
             return;
         }
         if (scheduler.processes.size() > 0) {
             scheduler.getNextProcess();
-            return;
         }
+    }
 
+    private void removeTerminatedProcesses() {
+        for (Process process : this.processes) {
+            if (process.getPCB().getState().equals(ProcessState.TERMINATED) && processIsInRAM(process)) {
+                removeTerminatedProcess(process);
+            }
+        }
+    }
 
+    private boolean processIsInRAM(Process process) {
+        return !this.terminatedProcesses.contains(process);
+    }
+
+    private void removeTerminatedProcess(Process terminatedProcess) {
+        for (MemorySlot slot : this.mmu.getCurrentlyUsedMemorySlots()) {
+            if (slot.getProcess().equals(terminatedProcess)) {
+                this.mmu.getCurrentlyUsedMemorySlots().remove(slot);
+                this.terminatedProcesses.add(terminatedProcess);
+                break;
+            }
+        }
     }
 
     private boolean checkToStop() {
         for (Process process : this.processes) {
             if (!process.getPCB().getState().equals(ProcessState.TERMINATED))
-                return false;
+                return true;
         }
-        return true;
+        return false;
     }
 
     private boolean processToLoad() {
