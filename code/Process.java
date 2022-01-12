@@ -23,7 +23,6 @@ public class Process {
     }
     
     public void waitInBackground() {
-        CPU.clock+=2;
         pcb.setState(ProcessState.READY,CPU.clock);
     }
 
