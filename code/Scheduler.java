@@ -20,7 +20,7 @@ public abstract class Scheduler {
      * schedulers. */
     public void removeProcess(Process p) {
             processes.remove(p);
-            p.getPCB().setState(ProcessState.TERMINATED,0);
+            p.getPCB().setState(ProcessState.TERMINATED,CPU.clock);
     }
     
     /* the getNextProcess() method should return the process that should
