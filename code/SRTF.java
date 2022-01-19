@@ -23,16 +23,12 @@ public class SRTF extends Scheduler {
         }
         else if(currentProcess.getBurstTime() !=0) {
             Process minProcess = minBurstTime();
-            if(currentProcess == minProcess){
-                currentProcess.setBurstTime(currentProcess.getBurstTime()-1);
-                System.out.println("RUNNING " + currentProcess.getPCB().getPid() + " IN " + CPU.clock);
-            }
-            else{
+            if (currentProcess != minProcess) {
                 currentProcess = minProcess;
                 currentProcess.run();
-                currentProcess.setBurstTime(currentProcess.getBurstTime()-1);
-                System.out.println("RUNNING " + currentProcess.getPCB().getPid() + " IN " + CPU.clock);
             }
+            currentProcess.setBurstTime(currentProcess.getBurstTime()-1);
+            System.out.println("RUNNING " + currentProcess.getPCB().getPid() + " IN " + CPU.clock);
         }
         else{
           removeProcess(currentProcess);
@@ -60,34 +56,4 @@ public class SRTF extends Scheduler {
        return minProcess;
     }
 
-    public static void main(String[] args) {
-        final Process[] processes = {
-                // Process parameters are: arrivalTime, burstTime, memoryRequirements (kB)
-                new Process(0, 7, 10),
-                new Process(1, 3, 40),
-                new Process(3, 4, 25),
-        };
-        Scheduler SRTFTEST = new SRTF();
-        processes[0].getPCB().setState(ProcessState.READY, 0);
-        processes[1].getPCB().setState(ProcessState.READY, 0);
-        processes[2].getPCB().setState(ProcessState.READY, 0);
-        SRTFTEST.addProcess(processes[0]);
-        SRTFTEST.addProcess(processes[1]);
-        SRTFTEST.addProcess(processes[2]);
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-        SRTFTEST.getNextProcess();
-
-
-    }
 }
