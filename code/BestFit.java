@@ -52,6 +52,7 @@ public class BestFit extends MemoryAllocationAlgorithm {
      * The function searches for a suitable memory address to store the process
      * within the given memory block (blockStart, blockEnd)
      *
+     *
      * @param blockStart               The memory address where the block begins
      * @param blockEnd                 The memory address where the block ends
      * @param currentlyUsedMemorySlots An array that stores all the used memory addresses
