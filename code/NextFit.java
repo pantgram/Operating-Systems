@@ -3,7 +3,11 @@ package code;
 import java.util.ArrayList;
 
 public class NextFit extends MemoryAllocationAlgorithm {
-    
+
+    private int lastAddress = 0;
+    private int lastBlock = 0;
+
+
     public NextFit(int[] availableBlockSizes) {
         super(availableBlockSizes);
     }
@@ -12,47 +16,73 @@ public class NextFit extends MemoryAllocationAlgorithm {
         boolean fit = false;
         int address = -1;
 
-        int blockLength = this.availableBlockSizes.length;// length of array
+        /* Length of availableBlockSizes array */
+        int blockLength = this.availableBlockSizes.length;
 
-        int blockstart = 0;
-        int blockend = this.availableBlockSizes[0];
+        /* Variables that represent the beginning and the ending of a memory block */
+        int blockStart = blockStartSum(this.lastBlock);
+        int blockEnd = blockEndSum(this.lastBlock);
 
-        int memorysize = p.getMemoryRequirements();
+        /* The required memory to store the Process */
+        int memorySize = p.getMemoryRequirements();
 
-        for(int i=0; i < blockLength; i++)
-        {
+        /* Iterating through availableBlockSizes array to find a suitable memory block */
+        for (int i = lastBlock; i < blockLength; i++) {
+
             /* Checking if the memory block is big enough to store the Process "p" */
-            if (this.availableBlockSizes[i] >= memorysize) {
-                address = blockFit(blockstart, blockend, currentlyUsedMemorySlots, memorysize);
+            if (this.availableBlockSizes[i] >= memorySize) {
 
-                //If the value of the variable "address" isn't -1 a suitable memory slot has been found
+                address = blockFit(blockStart, blockEnd, currentlyUsedMemorySlots, memorySize);
+
                 if (address != -1) {
+                    this.lastBlock = i;
+                    this.lastAddress = address + p.getMemoryRequirements();
                     fit = true;
                     break;
-                } else if (i + 1 < blockLength) {
-                    blockstart = this.availableBlockSizes[i];
-                    blockend += this.availableBlockSizes[i + 1];
                 }
-            } else if (i + 1 < blockLength) {
-                blockstart = this.availableBlockSizes[i];
-                blockend += this.availableBlockSizes[i + 1];
+
+            }
+
+            if (i + 1 < blockLength) {
+                blockStart = blockEnd;
+                blockEnd += this.availableBlockSizes[i + 1];
             }
         }
 
         return address;
     }
+
+    private int blockStartSum(int blockNum) {
+        int sum=0;
+        for (int i=0; i<blockNum; i++) {
+            sum += this.availableBlockSizes[i];
+        }
+        return sum;
+    }
+
+    private int blockEndSum(int blockNum) {
+        int sum=0;
+        for (int i=0; i<=blockNum; i++) {
+            sum += this.availableBlockSizes[i];
+        }
+        return sum;
+    }
+
     /**
      * The function searches for a suitable memory address to store the process
      * within the given memory block (blockStart, blockEnd)
      *
-     * @param blockStart The memory address where the block begins
-     * @param blockEnd The memory address where the block ends
+     * @param blockStart               The memory address where the block begins
+     * @param blockEnd                 The memory address where the block ends
      * @param currentlyUsedMemorySlots An array that stores all the used memory addresses
-     * @param memorySize The memory needed to store the Process
+     * @param memorySize               The memory needed to store the Process
      * @return a suitable memory address (int storingAddress)
      */
     private int blockFit(int blockStart, int blockEnd, ArrayList<MemorySlot> currentlyUsedMemorySlots, int memorySize) {
         int storingAddress = blockStart;
+        if (blockStart<this.lastAddress) {
+            storingAddress = this.lastAddress;
+        }
         ArrayList<MemorySlot> thisBlockArray = new ArrayList<>();
 
         /* Iterating through "currentlyUsedMemorySlots" ArrayList */
@@ -66,21 +96,21 @@ public class NextFit extends MemoryAllocationAlgorithm {
         }
 
         if (!thisBlockArray.isEmpty()) {
-            for (int i = 0; i<thisBlockArray.size(); i++) {
+            for (int i = 0; i < thisBlockArray.size(); i++) {
                 MemorySlot nextSlot = findNextSlot(thisBlockArray, storingAddress);
-                if(nextSlot == null) {
+                if (nextSlot == null) {
                     break;
                 }
 
-                if((nextSlot.getStart() - storingAddress) >= memorySize) {
+                if ((nextSlot.getStart() - storingAddress) >= memorySize) {
                     return storingAddress;
-                } else  {
+                } else {
                     storingAddress = nextSlot.getEnd();
                 }
             }
 
         } else {
-            return blockStart;
+            return storingAddress;
         }
 
 
