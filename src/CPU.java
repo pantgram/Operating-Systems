@@ -36,7 +36,9 @@ public class CPU {
             if (p == null && !isSRTF()) {
                 while (processToLoad())
                     clock++;
+                clock--;
             }
+
         }
 
     }
