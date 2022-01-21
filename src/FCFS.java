@@ -1,9 +1,11 @@
 public class FCFS extends Scheduler {
 
     private int flag;
+    private boolean f;
 
     public FCFS() {
         this.flag = 0;
+        this.f=false;
     }
 
     public void addProcess(Process p) {
@@ -22,26 +24,15 @@ public class FCFS extends Scheduler {
         //check if process is ended
         if (processes.get(0).getBurstTime() != 0) {
             processes.get(0).setBurstTime(processes.get(0).getBurstTime() - 1);
-            System.out.println("RUNNING" + " " + processes.get(0).getPCB().getPid());
-            System.out.println(CPU.clock);
+            System.out.println("RUNNING" + " " + processes.get(0).getPCB().getPid()+" "+CPU.clock);
             return processes.get(0);
 
         } else {
             //process ended so we have to remove it
             removeProcess(processes.get(0));
-            //if we have another process this is the next process
-            if (processes.size() > 0) {
-                processes.get(0).run();
-                processes.get(0).setBurstTime(processes.get(0).getBurstTime() - 1);
-                System.out.println("RUNNING" + " " + processes.get(0).getPCB().getPid());
-                System.out.println(CPU.clock);
-                return processes.get(0);
-            }
+            flag=0;
+            return null;
         }
-        //if there are not other processes return null
-        flag = 0;
-        return null;
     }
-
 }
 
