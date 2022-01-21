@@ -26,6 +26,8 @@ public class RoundRobin extends Scheduler {
     }
 
     public Process getNextProcess() {
+        boolean f = false; /** */
+
         //check if it's the first time using this method - initialize currentProcess + pointer
         if (currentProcess == null) {
             currentProcess = processes.get(0);
@@ -39,6 +41,7 @@ public class RoundRobin extends Scheduler {
             removeProcess(currentProcess);
             //get next process - if it exists
             currentProcess = nextProcessExists();
+            f = true; /** */
         }
 
         //if it reaches the quantum limit, get the next process - if it exists
@@ -49,7 +52,11 @@ public class RoundRobin extends Scheduler {
             if (currentProcess != null)
                 currentProcess.waitInBackground();
             currentProcess = nextProcessExists();
+            f = true; /** */
         }
+
+        if(f) /** */
+            return null; /** */
 
         reachQuantum++;
         if (currentProcess != null) {
