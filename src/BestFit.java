@@ -1,10 +1,8 @@
-package code;
-
 import java.util.ArrayList;
 
-public class FirstFit extends MemoryAllocationAlgorithm {
+public class BestFit extends MemoryAllocationAlgorithm {
 
-    public FirstFit(int[] availableBlockSizes) {
+    public BestFit(int[] availableBlockSizes) {
         super(availableBlockSizes);
     }
 
@@ -22,22 +20,24 @@ public class FirstFit extends MemoryAllocationAlgorithm {
         /* The required memory to store the Process */
         int memorySize = p.getMemoryRequirements();
 
+        int bestFit = Integer.MAX_VALUE;
+
         /* Iterating through availableBlockSizes array to find a suitable memory block */
         for (int i = 0; i < blockLength; i++) {
 
             /* Checking if the memory block is big enough to store the Process "p" */
             if (this.availableBlockSizes[i] >= memorySize) {
-                address = blockFit(blockStart, blockEnd, currentlyUsedMemorySlots, memorySize);
 
-                //If the value of the variable "address" isn't -1 a suitable memory slot has been found
-                if (address != -1) {
-                    fit = true;
-                    break;
-                } else if (i + 1 < blockLength) {
-                    blockStart = blockEnd;
-                    blockEnd += this.availableBlockSizes[i + 1];
+                int tempAddress = blockFit(blockStart, blockEnd, currentlyUsedMemorySlots, memorySize);
+
+                if (tempAddress != -1 && (blockEnd - tempAddress) < bestFit) {
+                    bestFit = blockEnd - tempAddress;
+                    address = tempAddress;
                 }
-            } else if (i + 1 < blockLength) {
+
+            }
+
+            if (i + 1 < blockLength) {
                 blockStart = blockEnd;
                 blockEnd += this.availableBlockSizes[i + 1];
             }
@@ -49,6 +49,7 @@ public class FirstFit extends MemoryAllocationAlgorithm {
     /**
      * The function searches for a suitable memory address to store the process
      * within the given memory block (blockStart, blockEnd)
+     *
      *
      * @param blockStart               The memory address where the block begins
      * @param blockEnd                 The memory address where the block ends
@@ -110,5 +111,4 @@ public class FirstFit extends MemoryAllocationAlgorithm {
         }
         return nextSlot;
     }
-
 }

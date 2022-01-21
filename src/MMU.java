@@ -1,5 +1,3 @@
-package code;
-
 import java.util.ArrayList;
 
 public class MMU {
@@ -42,6 +40,7 @@ public class MMU {
             MemorySlot newSlot = new MemorySlot(storingAddress, (storingAddress + p.getMemoryRequirements()), blockStart, blockEnd);
             newSlot.setProcess(p);
             p.getPCB().setState(ProcessState.READY, CPU.clock);
+            System.out.println("READY "+p.getPCB().getPid()+" IN  "+CPU.clock);
             this.currentlyUsedMemorySlots.add(newSlot);
         }
         return fit;

@@ -1,5 +1,3 @@
-package code;
-
 import java.util.ArrayList;
 
 public class CPU {
@@ -34,6 +32,7 @@ public class CPU {
         if (scheduler.processes.size() > 0) {
             scheduler.getNextProcess();
         }
+
     }
 
     private void removeTerminatedProcesses() {

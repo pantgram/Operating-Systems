@@ -1,5 +1,3 @@
-package code;
-
 import java.util.ArrayList;
 
 public class ProcessControlBlock {
@@ -20,9 +18,7 @@ public class ProcessControlBlock {
         //update the number of the total processes
         pidTotal += 1;
         this.pid = pidTotal;
-
     }
-
 
     public ProcessState getState() {
         return this.state;
@@ -32,7 +28,7 @@ public class ProcessControlBlock {
         //if a process starts
         if (this.state == ProcessState.READY && state == ProcessState.RUNNING)
             this.startTimes.add(currentClockTime);
-            //if a process stops
+        //if a process stops
         else if ((this.state == ProcessState.RUNNING && state == ProcessState.READY) || (this.state == ProcessState.RUNNING && state == ProcessState.TERMINATED))
             this.stopTimes.add(currentClockTime);
         //set state with the new one

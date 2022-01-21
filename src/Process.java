@@ -1,5 +1,3 @@
-package code;
-
 public class Process {
     private ProcessControlBlock pcb;
     private int arrivalTime;

@@ -1,5 +1,3 @@
-package code;
-
 public class MemorySlot {
 
     private Process process;

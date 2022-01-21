@@ -1,5 +1,3 @@
-package code;
-
 public class RoundRobin extends Scheduler {
 
     private int quantum;

@@ -1,5 +1,3 @@
-package code;
-
 public class SRTF extends Scheduler {
 
     private Process currentProcess;
