@@ -26,13 +26,23 @@ public class CPU {
     public void tick() {
         removeTerminatedProcesses();
 
-        if (processToLoad()) {
-            return;
-        }
-        if (scheduler.processes.size() > 0) {
-            scheduler.getNextProcess();
+        if (isSRTF() || scheduler.processes.size() == 0) {
+            if (processToLoad())
+                return;
         }
 
+        if (scheduler.processes.size() > 0) {
+            Process p = scheduler.getNextProcess();
+            if (p == null && !isSRTF()) {
+                while (processToLoad())
+                    clock++;
+            }
+        }
+
+    }
+
+    private boolean isSRTF() {
+        return this.scheduler.getClass().getName().equals("SRTF");
     }
 
     private void removeTerminatedProcesses() {
