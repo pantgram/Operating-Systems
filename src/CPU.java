@@ -24,8 +24,11 @@ public class CPU {
     }
 
     public void tick() {
+        /* Checking if a Terminated Process needs to be removed from RAM */
         removeTerminatedProcesses();
 
+        // If the SRTF algorithm is being used or no Processes have been added to the processes ArrayList
+        // processToLoad is called. If a process is stored in RAM the current CPU cycle is stopped
         if (isSRTF() || scheduler.processes.size() == 0) {
             if (processToLoad())
                 return;
@@ -33,7 +36,7 @@ public class CPU {
 
         if (scheduler.processes.size() > 0) {
             Process p = scheduler.getNextProcess();
-            if(p == null & isRR())
+            if(p == null && isRR())
                 clock++;
             if (p == null && !isSRTF()) {
                 while (processToLoad())
@@ -45,10 +48,16 @@ public class CPU {
 
     }
 
+    /**
+     * @return true if the SRTF algorithm is being used
+     */
     private boolean isSRTF() {
         return this.scheduler.getClass().getName().equals("SRTF");
     }
 
+    /**
+     * @return true if the Round Robin algorithm is being used
+     */
     private boolean isRR(){
         return this.scheduler.getClass().getName().equals("RoundRobin");
     }
@@ -61,6 +70,10 @@ public class CPU {
         }
     }
 
+    /**
+     * @param process Process object
+     * @return true if the Process object is not in the terminatedProcesses ArrayList
+     */
     private boolean processIsInRAM(Process process) {
         return !this.terminatedProcesses.contains(process);
     }

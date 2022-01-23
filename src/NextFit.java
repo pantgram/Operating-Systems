@@ -154,7 +154,7 @@ public class NextFit extends MemoryAllocationAlgorithm {
      * If no MemorySlot object such as this exists the null value is returned
      *
      * @param thisBlockSlots ArrayList with all the Memory slots in a specific memory block
-     * @param minStart Memory address after which a suitable memory address must be found
+     * @param minStart       Memory address after which a suitable memory address must be found
      * @return MemorySlot object
      */
     private MemorySlot findNextSlot(ArrayList<MemorySlot> thisBlockSlots, int minStart) {

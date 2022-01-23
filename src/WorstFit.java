@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class WorstFit extends MemoryAllocationAlgorithm {
-    
+
     public WorstFit(int[] availableBlockSizes) {
         super(availableBlockSizes);
     }
@@ -23,23 +23,23 @@ public class WorstFit extends MemoryAllocationAlgorithm {
         int worstFit = -1;
 
         /* Iterating through availableBlockSizes array to find a suitable memory block */
-        for (int i=0; i<blockLength; i++) {
+        for (int i = 0; i < blockLength; i++) {
 
             /* Checking if the memory block is big enough to store the Process "p" */
             if (this.availableBlockSizes[i] >= memorySize) {
 
                 int tempAddress = blockFit(blockStart, blockEnd, currentlyUsedMemorySlots, memorySize);
 
-                if ( tempAddress != -1 && (blockEnd - tempAddress) > worstFit) {
+                if (tempAddress != -1 && (blockEnd - tempAddress) > worstFit) {
                     worstFit = blockEnd - tempAddress;
                     address = tempAddress;
                 }
 
             }
 
-            if (i+1 < blockLength) {
+            if (i + 1 < blockLength) {
                 blockStart = blockEnd;
-                blockEnd += this.availableBlockSizes[i+1];
+                blockEnd += this.availableBlockSizes[i + 1];
             }
         }
 
@@ -50,10 +50,10 @@ public class WorstFit extends MemoryAllocationAlgorithm {
      * The function searches for a suitable memory address to store the process
      * within the given memory block (blockStart, blockEnd)
      *
-     * @param blockStart The memory address where the block begins
-     * @param blockEnd The memory address where the block ends
+     * @param blockStart               The memory address where the block begins
+     * @param blockEnd                 The memory address where the block ends
      * @param currentlyUsedMemorySlots An array that stores all the used memory addresses
-     * @param memorySize The memory needed to store the Process
+     * @param memorySize               The memory needed to store the Process
      * @return a suitable memory address (int storingAddress)
      */
     private int blockFit(int blockStart, int blockEnd, ArrayList<MemorySlot> currentlyUsedMemorySlots, int memorySize) {
@@ -70,16 +70,24 @@ public class WorstFit extends MemoryAllocationAlgorithm {
             }
         }
 
+        /* Checks if the thisBlockArray isn't empty */
         if (!thisBlockArray.isEmpty()) {
-            for (int i = 0; i<thisBlockArray.size(); i++) {
+
+            /* Iterate all the values in thisBlockArray array */
+            for (int i = 0; i < thisBlockArray.size(); i++) {
+
+                /* Getting the next MemorySlot in this block */
                 MemorySlot nextSlot = findNextSlot(thisBlockArray, storingAddress);
-                if(nextSlot == null) {
+
+                /* If there are no MemoryBlocks the loop ends */
+                if (nextSlot == null) {
                     break;
                 }
 
-                if((nextSlot.getStart() - storingAddress) >= memorySize) {
+                /* If enough space exists in RAM to store the Process the proper storing address is returned */
+                if ((nextSlot.getStart() - storingAddress) >= memorySize) {
                     return storingAddress;
-                } else  {
+                } else {
                     storingAddress = nextSlot.getEnd();
                 }
             }
@@ -99,7 +107,14 @@ public class WorstFit extends MemoryAllocationAlgorithm {
 
     }
 
-
+    /**
+     * Finds and returns the MemorySlot object that is stored the closest after the minStart memory address.
+     * If no MemorySlot object such as this exists the null value is returned
+     *
+     * @param thisBlockSlots ArrayList with all the Memory slots in a specific memory block
+     * @param minStart       Memory address after which a suitable memory address must be found
+     * @return MemorySlot object
+     */
     private MemorySlot findNextSlot(ArrayList<MemorySlot> thisBlockSlots, int minStart) {
         int nextSlotStart = Integer.MAX_VALUE;
         MemorySlot nextSlot = null;

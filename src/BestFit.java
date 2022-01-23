@@ -50,7 +50,6 @@ public class BestFit extends MemoryAllocationAlgorithm {
      * The function searches for a suitable memory address to store the process
      * within the given memory block (blockStart, blockEnd)
      *
-     *
      * @param blockStart               The memory address where the block begins
      * @param blockEnd                 The memory address where the block ends
      * @param currentlyUsedMemorySlots An array that stores all the used memory addresses
@@ -71,13 +70,21 @@ public class BestFit extends MemoryAllocationAlgorithm {
             }
         }
 
+        /* Checks if the thisBlockArray isn't empty */
         if (!thisBlockArray.isEmpty()) {
+
+            /* Iterate all the values in thisBlockArray array */
             for (int i = 0; i < thisBlockArray.size(); i++) {
+
+                /* Getting the next MemorySlot in this block */
                 MemorySlot nextSlot = findNextSlot(thisBlockArray, storingAddress);
+
+                /* If there are no MemoryBlocks the loop ends */
                 if (nextSlot == null) {
                     break;
                 }
 
+                /* If enough space exists in RAM to store the Process the proper storing address is returned */
                 if ((nextSlot.getStart() - storingAddress) >= memorySize) {
                     return storingAddress;
                 } else {
@@ -100,6 +107,14 @@ public class BestFit extends MemoryAllocationAlgorithm {
 
     }
 
+    /**
+     * Finds and returns the MemorySlot object that is stored the closest after the minStart memory address.
+     * If no MemorySlot object such as this exists the null value is returned
+     *
+     * @param thisBlockSlots ArrayList with all the Memory slots in a specific memory block
+     * @param minStart       Memory address after which a suitable memory address must be found
+     * @return MemorySlot object
+     */
     private MemorySlot findNextSlot(ArrayList<MemorySlot> thisBlockSlots, int minStart) {
         int nextSlotStart = Integer.MAX_VALUE;
         MemorySlot nextSlot = null;
