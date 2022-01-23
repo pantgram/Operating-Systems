@@ -40,7 +40,7 @@ public class MMU {
             MemorySlot newSlot = new MemorySlot(storingAddress, (storingAddress + p.getMemoryRequirements()), blockStart, blockEnd);
             newSlot.setProcess(p);
             p.getPCB().setState(ProcessState.READY, CPU.clock);
-            System.out.println("READY " + p.getPCB().getPid() + " IN  " + CPU.clock);
+            System.out.println("Process " + p.getPCB().getPid() + " - Ready in clock cycle: " + CPU.clock);
             this.currentlyUsedMemorySlots.add(newSlot);
         }
         return fit;
