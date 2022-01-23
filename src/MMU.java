@@ -40,15 +40,23 @@ public class MMU {
             MemorySlot newSlot = new MemorySlot(storingAddress, (storingAddress + p.getMemoryRequirements()), blockStart, blockEnd);
             newSlot.setProcess(p);
             p.getPCB().setState(ProcessState.READY, CPU.clock);
-            System.out.println("READY "+p.getPCB().getPid()+" IN  "+CPU.clock);
+            System.out.println("READY " + p.getPCB().getPid() + " IN  " + CPU.clock);
             this.currentlyUsedMemorySlots.add(newSlot);
         }
         return fit;
     }
 
+    /**
+     * If a Process is too big for all blocks in availableBlockSizes the Process is instantly TERMINATED
+     * and the value true is returned.
+     * If not the value false is returned
+     *
+     * @param process The current Process object
+     * @return true if the process is too big to be stored in RAM
+     */
     private boolean memoryOverload(Process process) {
-        for (int i=0; i<this.availableBlockSizes.length; i++) {
-            if (process.getMemoryRequirements() <= this.availableBlockSizes[i]) {
+        for (int availableBlockSize : this.availableBlockSizes) {
+            if (process.getMemoryRequirements() <= availableBlockSize) {
                 return false;
             }
         }
@@ -102,5 +110,4 @@ public class MMU {
         }
         return blockEnd;
     }
-
 }

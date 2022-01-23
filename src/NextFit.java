@@ -4,6 +4,7 @@ public class NextFit extends MemoryAllocationAlgorithm {
 
     private int lastAddress = 0;
     private int lastBlock = 0;
+    private boolean hasRestarted = false;
 
 
     public NextFit(int[] availableBlockSizes) {
@@ -32,6 +33,14 @@ public class NextFit extends MemoryAllocationAlgorithm {
 
                 address = blockFit(blockStart, blockEnd, currentlyUsedMemorySlots, memorySize);
 
+                /* All the memory has been searched for a suitable memory address but there isn't enough space for the
+                 Process right now */
+                if (address == -2) {
+                    this.hasRestarted = false;
+                    return -1;
+                }
+
+                /* A suitable memory address is found */
                 if (address != -1) {
                     this.lastBlock = i;
                     this.lastAddress = address + p.getMemoryRequirements();
@@ -40,27 +49,32 @@ public class NextFit extends MemoryAllocationAlgorithm {
                 }
 
             }
-
             if (i + 1 < blockLength) {
                 blockStart = blockEnd;
                 blockEnd += this.availableBlockSizes[i + 1];
             }
+            if (blockLength - 1 == i && !this.hasRestarted) {
+                i = -1;
+                blockStart = 0;
+                blockEnd = this.availableBlockSizes[0];
+                this.hasRestarted = true;
+            }
         }
-
+        this.hasRestarted = false;
         return address;
     }
 
     private int blockStartSum(int blockNum) {
-        int sum=0;
-        for (int i=0; i<blockNum; i++) {
+        int sum = 0;
+        for (int i = 0; i < blockNum; i++) {
             sum += this.availableBlockSizes[i];
         }
         return sum;
     }
 
     private int blockEndSum(int blockNum) {
-        int sum=0;
-        for (int i=0; i<=blockNum; i++) {
+        int sum = 0;
+        for (int i = 0; i <= blockNum; i++) {
             sum += this.availableBlockSizes[i];
         }
         return sum;
@@ -78,7 +92,7 @@ public class NextFit extends MemoryAllocationAlgorithm {
      */
     private int blockFit(int blockStart, int blockEnd, ArrayList<MemorySlot> currentlyUsedMemorySlots, int memorySize) {
         int storingAddress = blockStart;
-        if (blockStart<this.lastAddress) {
+        if (blockStart < this.lastAddress && !this.hasRestarted) {
             storingAddress = this.lastAddress;
         }
         ArrayList<MemorySlot> thisBlockArray = new ArrayList<>();
@@ -93,11 +107,24 @@ public class NextFit extends MemoryAllocationAlgorithm {
             }
         }
 
+        /* Checks if the thisBlockArray isn't empty */
         if (!thisBlockArray.isEmpty()) {
+
+            /* Iterate all the values in thisBlockArray array */
             for (int i = 0; i < thisBlockArray.size(); i++) {
+
+                /* Getting the next MemorySlot in this block */
                 MemorySlot nextSlot = findNextSlot(thisBlockArray, storingAddress);
+
+                /* If there are no MemoryBlocks the loop ends */
                 if (nextSlot == null) {
                     break;
+                }
+
+                /* If we have started looping through the memory again and the point from which the previous loop
+                 had begun is passed or reached the loop ends */
+                if (nextSlot.getStart() >= this.lastAddress && this.hasRestarted) {
+                    return -2;
                 }
 
                 if ((nextSlot.getStart() - storingAddress) >= memorySize) {
@@ -122,7 +149,14 @@ public class NextFit extends MemoryAllocationAlgorithm {
 
     }
 
-
+    /**
+     * Finds and returns the MemorySlot object that is stored the closest after the minStart memory address.
+     * If no MemorySlot object such as this exists the null value is returned
+     *
+     * @param thisBlockSlots ArrayList with all the Memory slots in a specific memory block
+     * @param minStart Memory address after which a suitable memory address must be found
+     * @return MemorySlot object
+     */
     private MemorySlot findNextSlot(ArrayList<MemorySlot> thisBlockSlots, int minStart) {
         int nextSlotStart = Integer.MAX_VALUE;
         MemorySlot nextSlot = null;
