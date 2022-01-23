@@ -33,6 +33,8 @@ public class CPU {
 
         if (scheduler.processes.size() > 0) {
             Process p = scheduler.getNextProcess();
+            if(p == null & isRR())
+                clock++;
             if (p == null && !isSRTF()) {
                 while (processToLoad())
                     clock++;
@@ -45,6 +47,10 @@ public class CPU {
 
     private boolean isSRTF() {
         return this.scheduler.getClass().getName().equals("SRTF");
+    }
+
+    private boolean isRR(){
+        return this.scheduler.getClass().getName().equals("RoundRobin");
     }
 
     private void removeTerminatedProcesses() {
