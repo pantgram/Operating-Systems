@@ -24,7 +24,7 @@ public class FCFS extends Scheduler {
         //check if process is ended
         if (processes.get(0).getBurstTime() != 0) {
             processes.get(0).setBurstTime(processes.get(0).getBurstTime() - 1);
-            System.out.println("RUNNING" + " " + processes.get(0).getPCB().getPid()+" "+CPU.clock);
+            System.out.println("Process " + processes.get(0).getPCB().getPid() + " - running in clock cycle: " + CPU.clock);
             return processes.get(0);
 
         } else {

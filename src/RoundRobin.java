@@ -48,7 +48,7 @@ public class RoundRobin extends Scheduler {
 
         if (currentProcess != null) {
             currentProcess.setBurstTime(currentProcess.getBurstTime() - 1);
-            System.out.println("RUNNING " + currentProcess.getPCB().getPid() + " IN " + CPU.clock);
+            System.out.println("Process " + currentProcess.getPCB().getPid() + " - running in clock cycle: " + CPU.clock);
         }
 
         //if the burst time of current process is 0, it is removed

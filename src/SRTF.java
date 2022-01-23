@@ -17,7 +17,7 @@ public class SRTF extends Scheduler {
             currentProcess = processes.get(0);
             currentProcess.run();
             currentProcess.setBurstTime(currentProcess.getBurstTime()-1);
-            System.out.println("RUNNING " + currentProcess.getPCB().getPid() + " IN " + CPU.clock);
+            System.out.println("Process " + currentProcess.getPCB().getPid() + " - running in clock cycle: " + CPU.clock);
         }
         else if(currentProcess.getBurstTime() !=0) { // if burst time is not 0 the new process is the minimum process of the arraylist
             Process minProcess = minBurstTime();
@@ -26,7 +26,7 @@ public class SRTF extends Scheduler {
                 currentProcess.run();
             }
             currentProcess.setBurstTime(currentProcess.getBurstTime()-1);
-            System.out.println("RUNNING " + currentProcess.getPCB().getPid() + " IN " + CPU.clock);
+            System.out.println("Process " + currentProcess.getPCB().getPid() + " - running in clock cycle: " + CPU.clock);
         }
         else{
           removeProcess(currentProcess);// remove process with burst time 0
@@ -34,7 +34,7 @@ public class SRTF extends Scheduler {
               currentProcess = minBurstTime();
               currentProcess.run();
               currentProcess.setBurstTime(currentProcess.getBurstTime() - 1);
-              System.out.println("RUNNING " + currentProcess.getPCB().getPid() + " IN " + CPU.clock);
+              System.out.println("Process " + currentProcess.getPCB().getPid() + " - running in clock cycle: " + CPU.clock);
           }else{System.out.println("No processes to be executed");}
         }
         return currentProcess;
