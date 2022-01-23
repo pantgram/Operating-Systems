@@ -19,9 +19,9 @@ public class SRTF extends Scheduler {
             currentProcess.setBurstTime(currentProcess.getBurstTime()-1);
             System.out.println("RUNNING " + currentProcess.getPCB().getPid() + " IN " + CPU.clock);
         }
-        else if(currentProcess.getBurstTime() !=0) {
+        else if(currentProcess.getBurstTime() !=0) { // if burst time is not 0 the new process is the minimum process of the arraylist
             Process minProcess = minBurstTime();
-            if (currentProcess != minProcess) {
+            if (currentProcess != minProcess) {// if the minimum process is also the current process
                 currentProcess = minProcess;
                 currentProcess.run();
             }
@@ -29,7 +29,7 @@ public class SRTF extends Scheduler {
             System.out.println("RUNNING " + currentProcess.getPCB().getPid() + " IN " + CPU.clock);
         }
         else{
-          removeProcess(currentProcess);
+          removeProcess(currentProcess);// remove process with burst time 0
           if(processes.size()>0) {
               currentProcess = minBurstTime();
               currentProcess.run();
