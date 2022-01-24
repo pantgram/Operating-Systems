@@ -3,53 +3,53 @@ public class Process {
     private int arrivalTime;
     private int burstTime;
     private int memoryRequirements;
-    
+
     public Process(int arrivalTime, int burstTime, int memoryRequirements) {
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         this.memoryRequirements = memoryRequirements;
         this.pcb = new ProcessControlBlock();
     }
-    
+
     public ProcessControlBlock getPCB() {
         return this.pcb;
     }
 
     public void run() {
-        CPU.clock+=2;
-        pcb.setState(ProcessState.RUNNING,CPU.clock);
+        CPU.clock += 2;
+        pcb.setState(ProcessState.RUNNING, CPU.clock);
     }
-    
+
     public void waitInBackground() {
-        pcb.setState(ProcessState.READY,CPU.clock);
+        pcb.setState(ProcessState.READY, CPU.clock);
     }
 
     public double getWaitingTime() {
-        int waitingTime=0;
-        int end=pcb.getStartTimes().size()-1;
+        int waitingTime = 0;
+        int end = pcb.getStartTimes().size() - 1;
 
         //add all periods that the process is in waiting situation,
         //since the first starting time
-        for(int i=1; i<=end; i++){
-            int temp=pcb.getStartTimes().get(i)-pcb.getStopTimes().get(i-1);
-            waitingTime+=temp;
+        for (int i = 1; i <= end; i++) {
+            int temp = pcb.getStartTimes().get(i) - pcb.getStopTimes().get(i - 1);
+            waitingTime += temp;
         }
 
         //add response time on total
-        waitingTime+=getResponseTime();
+        waitingTime += getResponseTime();
 
         return waitingTime;
     }
-    
+
     public double getResponseTime() {
         int startingTime = pcb.getStartTimes().get(0);
         //first element of startTimes pcb-arraylist
 
         return startingTime - arrivalTime;
     }
-    
+
     public double getTurnAroundTime() {
-        int finishingTime = pcb.getStopTimes().get(pcb.getStopTimes().size()-1);
+        int finishingTime = pcb.getStopTimes().get(pcb.getStopTimes().size() - 1);
         //last element of stopTimes pcb-arraylist
 
         return finishingTime - arrivalTime;
@@ -62,10 +62,12 @@ public class Process {
     public int getMemoryRequirements() {
         return this.memoryRequirements;
     }
-    public int getBurstTime(){
+
+    public int getBurstTime() {
         return this.burstTime;
     }
-    public int getArrivalTime(){
+
+    public int getArrivalTime() {
         return this.arrivalTime;
     }
 }

@@ -82,6 +82,7 @@ public class RoundRobin extends Scheduler {
      * Check if there is an element after the currentProcess element - in processes arraylist.
      * If there is that element, that's the next process to execute. If not, start again
      * the execution from the first element of processes. Those happen when processes.size()>0.
+     *
      * @return next process to be executed or null (no more processes)
      */
     private Process nextProcessExists() {

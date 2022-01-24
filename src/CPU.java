@@ -48,7 +48,7 @@ public class CPU {
          */
         if (scheduler.processes.size() > 0) {
             Process p = scheduler.getNextProcess();
-            if(p == null && isRR())
+            if (p == null && isRR())
                 clock++;
             if (p == null && !isSRTF()) {
                 while (processToLoad())
@@ -70,7 +70,7 @@ public class CPU {
     /**
      * @return true if the Round Robin algorithm is being used
      */
-    private boolean isRR(){
+    private boolean isRR() {
         return this.scheduler.getClass().getName().equals("RoundRobin");
     }
 
@@ -95,6 +95,7 @@ public class CPU {
 
     /**
      * delete given process that is terminated and exists in RAM
+     *
      * @param terminatedProcess given process
      */
     private void removeTerminatedProcess(Process terminatedProcess) {
@@ -121,6 +122,7 @@ public class CPU {
 
     /**
      * Add one process, which state is NEW, to arraylist processes when it is necessary.
+     *
      * @return true when at least one process is added in arraylist processes
      */
     private boolean processToLoad() {
